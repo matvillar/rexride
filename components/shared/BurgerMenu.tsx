@@ -14,12 +14,14 @@ import { FaUser } from 'react-icons/fa';
 import { GiAbstract028 } from 'react-icons/gi';
 import { AiFillMessage } from 'react-icons/ai';
 import { FaSearch } from 'react-icons/fa';
+import { HiMenuAlt3 } from 'react-icons/hi';
+import { headerLinks } from '@/lib/constants/others';
 
 const BurgerMenu = () => {
   return (
     <Sheet>
       <SheetTrigger>
-        <IoMdMenu size={28} />
+        <HiMenuAlt3 size={28} />
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
@@ -28,32 +30,12 @@ const BurgerMenu = () => {
               Rex<span className="text-red-500">Ride</span>
             </h1>
           </SheetTitle>
-          <SheetDescription className="flex flex-col items-start gap-4">
-            <div className="mt-4">
-              <Link href="/">
-                <Item label="Home" icon={IoHomeSharp} />
+          <SheetDescription className="flex flex-col items-start gap-5">
+            {headerLinks.map((link) => (
+              <Link href={link.href} key={link.href}>
+                <Item label={link.label} icon={link.icon} />
               </Link>
-            </div>
-            <div className="mt-4">
-              <Link href="/search-rides">
-                <Item label="Search Rides" icon={FaSearch} />
-              </Link>
-            </div>
-            <div className="mt-4">
-              <Link href="/messages">
-                <Item label="Messages" icon={AiFillMessage} />
-              </Link>
-            </div>
-            <div className="mt-4 ">
-              <Link href="/profile">
-                <Item label="Profile" icon={FaUser} />
-              </Link>
-            </div>
-            <div className="mt-4">
-              <Link href="/about-us">
-                <Item label="About" icon={GiAbstract028} />
-              </Link>
-            </div>
+            ))}
           </SheetDescription>
         </SheetHeader>
       </SheetContent>

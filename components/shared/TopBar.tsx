@@ -1,56 +1,72 @@
+'use client';
 import React from 'react';
 import Image from 'next/image';
-import { UserButton } from '@clerk/nextjs';
+import { SignedIn, UserButton } from '@clerk/nextjs';
 import MyCard from './MyCard';
 import BurgerMenu from './BurgerMenu';
 import Link from 'next/link';
+import { currentUser } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
+import { SignedOut } from '@clerk/nextjs';
+import { Button } from '../ui/button';
+import NavItems from './NavItems';
+
 const TopBar = () => {
   return (
-    <MyCard>
-      <div className="flex justify-between items-center">
-        <div className="flex gap-1 items-center">
+    <header className="w-full border-b bg-white shadow-md">
+      <div className="max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-0 w-full flex items-center justify-between">
+        <div className="w-36 flex items-center gap-2">
           <Link href="/">
-            <Image src="/logo.svg" alt="Logo" width={60} height={60} />
+            <Image src="/logo.svg" alt="RexRide Logo" width={50} height={50} />
           </Link>
           <h1 className="hidden text-2xl font-bold lg:block">
             Rex<span className="text-red-500">Ride</span>
           </h1>
         </div>
-        <div className="flex gap-5">
-          <Link href="/">
-            <p className="hidden font-bold uppercase lg:block cursor-pointer hover:text-red-500 transition-all">
-              Home
-            </p>
-          </Link>
-          <Link href="/search-rides">
-            <p className="hidden font-bold uppercase lg:block cursor-pointer hover:text-red-500 transition-all">
-              Search Rides
-            </p>
-          </Link>
-          <Link href="/messages">
-            <p className="hidden font-bold uppercase lg:block cursor-pointer hover:text-red-500 transition-all">
-              Messages
-            </p>
-          </Link>
-
-          <Link href="/about-us">
-            <p className="hidden font-bold uppercase lg:block cursor-pointer hover:text-red-500 transition-all">
-              About Us
-            </p>
-          </Link>
-        </div>
-        <div className="flex gap-4">
-          <p>
-            Hi, <span>Name</span>!
-          </p>
-          <UserButton />
-          <div className="lg:hidden">
-            <BurgerMenu />
-          </div>
+        <SignedIn>
+          <nav className="md:flex-between hidden w-full max-w-xs lg:block">
+            <NavItems />
+          </nav>
+        </SignedIn>
+        <div className="flex w-32 justify-end gap-3">
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+            <div className="lg:hidden">
+              <BurgerMenu />
+            </div>
+          </SignedIn>
+          <SignedOut>
+            <Button asChild className="rounded-full" size="lg">
+              <Link href="/sign-in">Log in</Link>
+            </Button>
+          </SignedOut>
         </div>
       </div>
-    </MyCard>
+    </header>
   );
 };
 
 export default TopBar;
+
+// <MyCard>
+// <div className="flex justify-between items-center">
+//   <div className="flex gap-1 items-center">
+//     <Link href="/">
+//       <Image src="/logo.svg" alt="Logo" width={60} height={60} />
+//     </Link>
+//     <h1 className="hidden text-2xl font-bold lg:block">
+//       Rex<span className="text-red-500">Ride</span>
+//     </h1>
+//   </div>
+
+//   <div className="flex gap-4">
+//     <p>
+//       Hi, <span>Name</span>!
+//     </p>
+//     <UserButton />
+//     <div className="lg:hidden">
+//       <BurgerMenu />
+//     </div>
+//   </div>
+// </div>
+// </MyCard>
