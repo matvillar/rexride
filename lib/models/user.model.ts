@@ -4,7 +4,6 @@ import { UserTypeEnum } from '../constants/enums/UserTypeEnum';
 const userSchema = new mongoose.Schema({
   clerkId: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
-  id: { type: String, required: true },
   username: { type: String, required: true, unique: true },
   name: { type: String, required: true },
   userImage: { type: String, required: true },
