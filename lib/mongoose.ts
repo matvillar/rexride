@@ -17,7 +17,7 @@ export const connect = async () => {
   cached.promise =
     cached.promise ||
     mongoose.connect(process.env.MONGO_URI, {
-      dbName: 'RexRide',
+      dbName: 'RidingRex',
       bufferCommands: false,
     });
 
