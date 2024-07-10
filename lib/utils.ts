@@ -45,3 +45,27 @@ export const handleError = (error: unknown) => {
   console.error(error);
   throw new Error(typeof error === 'string' ? error : JSON.stringify(error));
 };
+
+export function formatDateFromIso(isoDate: string | Date): string {
+  const date = new Date(isoDate);
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  };
+  return date.toLocaleDateString('en-US', dateOptions);
+}
+
+// Function to format the time part
+export function formatTimeFromIso(isoDate: string | Date): string {
+  const date = new Date(isoDate);
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  };
+  const timeString = date
+    .toLocaleTimeString('en-US', timeOptions)
+    .toLowerCase();
+  return timeString.replace(' ', '');
+}

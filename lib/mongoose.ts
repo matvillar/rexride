@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 let cached = (global as any).mongoose || { connection: null, promise: null };
-let isConnected: boolean = false;
+// let isConnected: boolean = false;
 
 export const connect = async () => {
   if (cached.connection) {

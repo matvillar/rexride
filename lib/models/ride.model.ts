@@ -1,10 +1,15 @@
 import mongoose from 'mongoose';
 import { RideStatusEnum } from '../constants/enums/RideStatusEnum';
+import { UserTypeEnum } from '../constants/enums/UserTypeEnum';
 const rideSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   passengers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   startTime: { type: Date, required: true },
-  endTime: { type: Date },
+  rideType: {
+    type: String,
+    enum: [UserTypeEnum.DRIVER, UserTypeEnum.PASSENGER],
+    required: true,
+  },
   status: {
     type: String,
     enum: [
@@ -19,6 +24,7 @@ const rideSchema = new mongoose.Schema({
   pricePerSeat: { type: Number, required: true },
   pickupLocation: { type: String, required: true },
   dropOffLocation: { type: String, required: true },
+  description: { type: String },
   createdAt: { type: Date, default: Date.now },
 });
 

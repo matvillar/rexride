@@ -17,7 +17,7 @@ import { useUploadThing } from '@/lib/uploadthing';
 import { Button } from '../ui/button';
 import { usePathname, useRouter } from 'next/navigation';
 import { userValidation } from '@/lib/validations/user.validation';
-import { AccProfileParam } from '@/lib/constants/params/AccProfileParam';
+import { AccProfileParam } from '@/lib/constants/types/AccProfileParam';
 import { set } from 'mongoose';
 import { updateUser } from '@/lib/actions/user.actions';
 import { Input } from '../ui/input';
@@ -28,13 +28,15 @@ const AccProfile = ({ user }: AccProfileParam) => {
   const router = useRouter();
   const pathname = usePathname();
 
+  const userData = JSON.parse(JSON.stringify(user));
+
   const form = useForm({
     resolver: zodResolver(userValidation),
     defaultValues: {
-      name: user?.name || 'RandomRexUser',
-      username: user?.username || '',
-      userImage: user?.userImage || '',
-      phoneNumber: user?.phoneNumber || '',
+      name: userData?.name || 'RandomRexUser',
+      username: userData?.username || '',
+      userImage: userData?.userImage || '',
+      phoneNumber: userData?.phoneNumber || '',
     },
   });
 
@@ -72,13 +74,13 @@ const AccProfile = ({ user }: AccProfileParam) => {
         values.userImage = imageFileRes[0].url;
       }
     }
-    await updateUser({
-      userId: user.id,
-      username: values.username,
-      name: values.name,
-      userImage: values.userImage,
-      phoneNumber: values.phoneNumber,
-    });
+    // await updateUser({
+    //   userId: user.id,
+    //   username: values.username,
+    //   name: values.name,
+    //   userImage: values.userImage,
+    //   phoneNumber: values.phoneNumber,
+    // });
 
     // on success redirect to home
     router.push('/');

@@ -5,6 +5,7 @@ export interface IRide extends Document {
   _id: string;
   userId: { _id: string; name: string; userImage: string };
   passengers: { _id: string; name: string; userImage: string }[];
+  rideType: string;
   startTime: Date;
   endTime?: Date;
   status: RideStatusEnum;

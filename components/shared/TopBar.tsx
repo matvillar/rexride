@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { SignedIn, UserButton } from '@clerk/nextjs';
 import MyCard from './MyCard';
@@ -12,6 +12,12 @@ import { Button } from '../ui/button';
 import NavItems from './NavItems';
 
 const TopBar = () => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return (
     <header className="w-full border-b bg-white shadow-md">
       <div className="max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-0 w-full flex items-center justify-between">
@@ -23,24 +29,28 @@ const TopBar = () => {
             Rex<span className="text-red-500">Ride</span>
           </h1>
         </div>
-        <SignedIn>
-          <nav className="md:flex-between hidden w-full max-w-xs lg:block">
-            <NavItems />
-          </nav>
-        </SignedIn>
-        <div className="flex w-32 justify-end gap-3">
-          <SignedIn>
-            <UserButton afterSignOutUrl="/" />
-            <div className="lg:hidden">
-              <BurgerMenu />
+        {isMounted && (
+          <>
+            <SignedIn>
+              <nav className="md:flex-between hidden w-full max-w-xs lg:block">
+                <NavItems />
+              </nav>
+            </SignedIn>
+            <div className="flex w-32 justify-end gap-3">
+              <SignedIn>
+                <UserButton afterSignOutUrl="/" />
+                <div className="lg:hidden">
+                  <BurgerMenu />
+                </div>
+              </SignedIn>
+              <SignedOut>
+                <Button asChild className="rounded-full" size="lg">
+                  <Link href="/sign-in">Log in</Link>
+                </Button>
+              </SignedOut>
             </div>
-          </SignedIn>
-          <SignedOut>
-            <Button asChild className="rounded-full" size="lg">
-              <Link href="/sign-in">Log in</Link>
-            </Button>
-          </SignedOut>
-        </div>
+          </>
+        )}
       </div>
     </header>
   );

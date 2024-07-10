@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
   isOnboard: { type: Boolean, required: true },
   chats: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chat' }],
   createdAt: { type: Date, default: Date.now },
+  reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
 });
 
 const User = mongoose.models.User || mongoose.model('User', userSchema);

@@ -10,16 +10,16 @@ import { redirect } from 'next/navigation';
 import { use } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import Collection from '@/components/shared/Collection';
+import { getAllRides } from '@/lib/actions/ride.actions';
 
 export default async function Home() {
-  // const user = currentUser();
-  // if (!user) return null;
-
-  // const userInfo = await fetchUserInfo(user.id);
-  // if (!userInfo?.isOnboard) {
-  //   redirect('/get-onboard');
-  // }
-
+  const rides = await getAllRides({
+    query: '',
+    limit: 6,
+    page: 1,
+    city: '',
+  });
   return (
     <>
       <section className="p-5 md:py-10">
@@ -47,11 +47,21 @@ export default async function Home() {
 
       <section
         id="search-rides"
-        className="bg-red-50 max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-0 w-full my-8 flex flex-col gap-8"
+        className="bg-red-50 max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-0 w-full my-8 flex flex-col gap-8 rounded-lg"
       >
-        <h2 className=" font-bold text-[32px] leading-[40px] lg:text-[36px] lg:leading-[44px] xl:text-[40px] xl:leading-[48px]">
+        <h2 className=" font-bold text-[32px] p-5 leading-[40px] lg:text-[36px] lg:leading-[44px] xl:text-[40px] xl:leading-[48px]">
           Find Your Ride
         </h2>
+
+        <Collection
+          data={rides?.data}
+          noRidesTitle="No Rides Found"
+          noRidesForSpecificLocation="No Rides for this specific location, Come back later!"
+          collectionType="All_Rides"
+          limit={4}
+          page={1}
+          totalPage={2}
+        />
         <div className="flex w-full flex-col gap-5 md:flex-row"></div>
       </section>
     </>

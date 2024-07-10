@@ -43,7 +43,7 @@ export async function deleteUser(clerkId: string) {
 }
 
 export async function fetchUserInfo(userId: string) {
-  connect();
+  await connect();
   try {
     const user = await User.findOne({ id: userId });
     return user;
