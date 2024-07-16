@@ -16,7 +16,7 @@ import { getAllRides } from '@/lib/actions/ride.actions';
 export default async function Home() {
   const rides = await getAllRides({
     query: '',
-    limit: 6,
+    limit: 4,
     page: 1,
     city: '',
   });

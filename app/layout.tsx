@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import './globals.css';
-import { ClerkProvider } from '@clerk/nextjs';
+
+import ConvexClientProvider from '@/providers/ConvexClientProvider';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { Toaster } from '@/components/ui/sonner';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -23,10 +26,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={poppins.variable}>{children}</body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body className={poppins.variable}>
+        <ConvexClientProvider>
+          <Toaster richColors />
+          {children}
+        </ConvexClientProvider>
+      </body>
+    </html>
   );
 }

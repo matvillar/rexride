@@ -10,6 +10,7 @@ import { redirect } from 'next/navigation';
 import { SignedOut } from '@clerk/nextjs';
 import { Button } from '../ui/button';
 import NavItems from './NavItems';
+import NotificationsDropDownMenu from './NotificationsDropDownMenu';
 
 const TopBar = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -37,6 +38,9 @@ const TopBar = () => {
               </nav>
             </SignedIn>
             <div className="flex w-32 justify-end gap-3">
+              <SignedIn>
+                <NotificationsDropDownMenu />
+              </SignedIn>
               <SignedIn>
                 <UserButton afterSignOutUrl="/" />
                 <div className="lg:hidden">

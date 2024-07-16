@@ -74,15 +74,6 @@ const AccProfile = ({ user }: AccProfileParam) => {
         values.userImage = imageFileRes[0].url;
       }
     }
-    // await updateUser({
-    //   userId: user.id,
-    //   username: values.username,
-    //   name: values.name,
-    //   userImage: values.userImage,
-    //   phoneNumber: values.phoneNumber,
-    // });
-
-    // on success redirect to home
     router.push('/');
   };
 
