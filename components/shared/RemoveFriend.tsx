@@ -28,7 +28,6 @@ function RemoveFriend({ conversationId, open, setOpen }: Props) {
   const { mutate: removeFriend, pending } = useMutationState(
     api.friend.removeFriend
   );
-  console.log('removeFriend', removeFriend);
 
   const handleRemoveFriend = async () => {
     await removeFriend({ conversationId })

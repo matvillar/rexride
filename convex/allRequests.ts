@@ -10,7 +10,6 @@ export const getAllRequests = query({
       console.error('User not authenticated');
       throw new ConvexError('User not authenticated');
     }
-    console.log('User identity:', userIdentity);
 
     const currentUser = await getUserByClerkId({
       ctx,
@@ -20,13 +19,11 @@ export const getAllRequests = query({
       console.error('User not found');
       throw new ConvexError('User not found');
     }
-    console.log('Current user:', currentUser);
 
     const requests = await ctx.db
       .query('requests')
       .withIndex('by_receiver', (q) => q.eq('receiver', currentUser._id))
       .collect();
-    console.log('Requests:', requests);
 
     const senderDetails = await Promise.all(
       requests.map(async (request) => {
@@ -38,7 +35,6 @@ export const getAllRequests = query({
         return { request, sender };
       })
     );
-    console.log('Sender details:', senderDetails);
 
     return senderDetails;
   },
@@ -52,7 +48,6 @@ export const reqCount = query({
       console.error('User not authenticated');
       throw new ConvexError('User not authenticated');
     }
-    console.log('User identity:', userIdentity);
 
     const currentUser = await getUserByClerkId({
       ctx,
@@ -62,13 +57,11 @@ export const reqCount = query({
       console.error('User not found');
       throw new ConvexError('User not found');
     }
-    console.log('Current user:', currentUser);
 
     const requests = await ctx.db
       .query('requests')
       .withIndex('by_receiver', (q) => q.eq('receiver', currentUser._id))
       .collect();
-    console.log('Requests:', requests);
 
     return requests.length;
   },

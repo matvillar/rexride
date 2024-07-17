@@ -26,9 +26,16 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useState } from 'react';
 import { createRide } from '@/lib/actions/ride.actions';
 import { useRouter } from 'next/navigation';
+import { updateRide } from '@/lib/actions/ride.actions';
 
-const RideForm = ({ userId, type }: RideFormParams) => {
-  const initValues = RideDefaultValues;
+const RideForm = ({ userId, type, ride, rideId }: RideFormParams) => {
+  const initValues =
+    ride && type === 'Update'
+      ? {
+          ...ride,
+          startTime: new Date(ride.startTime),
+        }
+      : RideDefaultValues;
   const router = useRouter();
   const form = useForm<z.infer<typeof rideValidation>>({
     resolver: zodResolver(rideValidation),
@@ -49,7 +56,26 @@ const RideForm = ({ userId, type }: RideFormParams) => {
           path: '/profile',
         });
         if (newRide) {
+          form.reset();
           router.push(`/rides/${newRide._id}`);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (type === 'Update') {
+      // Update
+      if (!rideId) {
+        router.back();
+      }
+      try {
+        const updatedRide = await updateRide({
+          userId,
+          ride: { ...values, _id: rideId! },
+          path: `/rides/${rideId}`,
+        });
+        if (updatedRide) {
+          form.reset();
+          router.push(`/rides/${updatedRide._id}`);
         }
       } catch (error) {
         console.log(error);

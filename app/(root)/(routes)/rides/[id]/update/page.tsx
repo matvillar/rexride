@@ -1,10 +1,15 @@
 import RideForm from '@/components/forms/RideForm';
+import { getRideById } from '@/lib/actions/ride.actions';
+import { UpdateRideProps } from '@/lib/constants/types/UpdateEventParams';
+
 import { auth } from '@clerk/nextjs/server';
 import React from 'react';
 
-const UpdateRide = () => {
+const UpdateRide = async ({ params: { id } }: UpdateRideProps) => {
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
+  const ride = await getRideById(id);
+
   return (
     <>
       <section className="bg-red-50 bg-cover py-5 md:py-10">
@@ -13,7 +18,7 @@ const UpdateRide = () => {
         </h3>
       </section>
       <div className="max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-0 my-8">
-        <RideForm userId={userId} type="Update" />
+        <RideForm userId={userId} ride={ride} rideId={ride._id} type="Update" />
       </div>
     </>
   );

@@ -9,7 +9,6 @@ export const create = mutation({
   },
   handler: async (ctx, args) => {
     const userIdentity = await ctx.auth.getUserIdentity();
-    console.log(userIdentity);
 
     if (!userIdentity) {
       throw new ConvexError('User not authenticated');

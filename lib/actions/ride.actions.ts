@@ -10,6 +10,7 @@ import { handleError } from '../utils';
 import { GetAllRidesParams } from '../constants/types/GetAllRidesParams';
 import { DeleteRideProps } from '../constants/types/DeleteRideProps';
 import { revalidatePath } from 'next/cache';
+import { UpdateRideParams } from '../constants/types/UpdateRideParams';
 
 const fillRideDetails = async (query: any) => {
   return query.populate({
@@ -37,6 +38,28 @@ export const createRide = async ({
       userId,
     });
     return JSON.parse(JSON.stringify(newRide));
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const updateRide = async ({ userId, ride, path }: UpdateRideParams) => {
+  try {
+    await connect();
+    const rideToUpdate = await Ride.findById(ride._id);
+
+    if (!rideToUpdate || rideToUpdate.userId.toHexString() !== userId) {
+      throw new Error('Unauthorized or ride not found');
+    }
+
+    const updatedRide = await Ride.findByIdAndUpdate(
+      ride._id,
+      { ...ride, rideType: ride.rideType },
+      { new: true }
+    );
+
+    revalidatePath(path);
+    return JSON.parse(JSON.stringify(updatedRide));
   } catch (error) {
     handleError(error);
   }
