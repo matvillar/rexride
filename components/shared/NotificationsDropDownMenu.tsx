@@ -20,7 +20,7 @@ const NotificationsDropDownMenu = (props: Props) => {
   const [notificationCount, setNotificationCount] = useState(0);
   const requests = useQuery(api.allRequests.getAllRequests);
   const reqCount = useQuery(api.allRequests.reqCount);
-  const msgCount = 1;
+  const msgCount = 0;
 
   useEffect(() => {
     if (reqCount !== undefined && msgCount !== undefined) {
