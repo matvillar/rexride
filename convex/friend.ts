@@ -21,7 +21,6 @@ export const removeFriend = mutation({
     }
 
     const conversation = await ctx.db.get(args.conversationId);
-
     if (!conversation) {
       throw new ConvexError('Conversation not found');
     }
@@ -32,7 +31,6 @@ export const removeFriend = mutation({
         q.eq('conversationId', args.conversationId)
       )
       .collect();
-
     if (!chatMembers || chatMembers.length !== 2) {
       throw new ConvexError('This chat does not have any members');
     }
@@ -43,7 +41,6 @@ export const removeFriend = mutation({
         q.eq('conversationId', args.conversationId)
       )
       .unique();
-
     if (!friendship) {
       throw new ConvexError('Friendship not found');
     }
@@ -55,18 +52,33 @@ export const removeFriend = mutation({
       )
       .collect();
 
-    await ctx.db.delete(args.conversationId);
-    await ctx.db.delete(friendship._id);
+    try {
+      // Deleting the conversation
+      await ctx.db.delete(args.conversationId);
 
-    await Promise.all(
-      chatMembers.map(async (member) => {
-        await ctx.db.delete(member._id);
-      })
-    );
-    await Promise.all(
-      messages.map(async (message) => {
-        await ctx.db.delete(message._id);
-      })
-    );
+      // Deleting the friendship
+      await ctx.db.delete(friendship._id);
+
+      // Deleting chat members
+      await Promise.all(
+        chatMembers.map(async (member) => {
+          await ctx.db.delete(member._id);
+        })
+      );
+
+      // Deleting messages
+      await Promise.all(
+        messages.map(async (message) => {
+          await ctx.db.delete(message._id);
+        })
+      );
+
+      console.log(
+        'Deletion successful for conversation, friendship, chat members, and messages.'
+      );
+    } catch (error) {
+      console.error('Error during deletion:', error);
+      throw new ConvexError('Error during deletion process');
+    }
   },
 });

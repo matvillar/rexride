@@ -3,7 +3,17 @@ import { Id } from '@/convex/_generated/dataModel';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import DCDropDownMenu from './DCDropDownMenu';
+import { FaEllipsisV } from 'react-icons/fa';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+import { cn } from '@/lib/utils';
 
 type Props = {
   id: Id<'conversations'>;
@@ -11,6 +21,11 @@ type Props = {
   username: string;
   lastMessageSender?: string;
   lastMessageContent?: string;
+  options?: {
+    label: string;
+    destructive: boolean;
+    onClick: () => void;
+  }[];
 };
 
 const DirectChatItem = ({
@@ -19,6 +34,7 @@ const DirectChatItem = ({
   username,
   lastMessageContent,
   lastMessageSender,
+  options,
 }: Props) => {
   return (
     <Link
@@ -51,9 +67,26 @@ const DirectChatItem = ({
         </div>
       </div>
       <div className="flex justify-center items-center">
-        <div className="text-gray-400">
-          <DCDropDownMenu />
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <div className="relative">
+              <FaEllipsisV />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {options?.map((opt, id) => (
+              <DropdownMenuItem
+                key={id}
+                className={cn('font-semibold', {
+                  'text-red-500': opt.destructive,
+                })}
+                onClick={opt.onClick}
+              >
+                {opt.label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </Link>
   );

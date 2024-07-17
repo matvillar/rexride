@@ -10,6 +10,8 @@ import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import BodyChat from './_component/BodyChat';
 import ChatInput from './_component/ChatInput';
+import { useState } from 'react';
+import RemoveFriend from '@/components/shared/RemoveFriend';
 
 // type Props = {
 //   params: { conversationId: Id<'conversations'> };
@@ -21,6 +23,8 @@ const ChatsPage = () => {
   const conversation = useQuery(api.conversation.getConversation, {
     id: chatId as Id<'conversations'>,
   });
+
+  const [removeFriendDialog, setRemoveFriendDialog] = useState(false);
 
   return (
     <>
@@ -41,9 +45,21 @@ const ChatsPage = () => {
               </div>
             ) : (
               <div className="flex flex-col h-full">
+                <RemoveFriend
+                  open={removeFriendDialog}
+                  setOpen={setRemoveFriendDialog}
+                  conversationId={conversation._id}
+                />
                 <TopRightSideChat
                   imageUrl={conversation.otherMember.imageUrl}
                   name={conversation.otherMember.username || 'Chat Time'}
+                  options={[
+                    {
+                      label: 'Remove friend',
+                      destructive: true,
+                      onClick: () => setRemoveFriendDialog(true),
+                    },
+                  ]}
                 />
                 <BodyChat />
                 <ChatInput />

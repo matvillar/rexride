@@ -8,8 +8,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { FaEllipsisV } from 'react-icons/fa';
+import { cn } from '@/lib/utils';
 
-const DCDropDownMenu = () => {
+type Props = {
+  label: string;
+  destructive: boolean;
+  onClick: () => void;
+};
+
+const DCDropDownMenu = ({ label, destructive, onClick }: Props) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -19,14 +26,11 @@ const DCDropDownMenu = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {/* Add your notification items here */}
-        <DropdownMenuItem onClick={() => console.log('pepe')}>
-          Profile
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => console.log('pepe')}>
-          Delete Chat
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => console.log('pepe')}>
-          Remove Friend
+        <DropdownMenuItem
+          className={cn('font-semibold', { 'text-red-500': destructive })}
+          onClick={() => onClick}
+        >
+          {label}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
