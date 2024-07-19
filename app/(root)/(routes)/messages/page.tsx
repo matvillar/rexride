@@ -12,7 +12,7 @@ const page = () => {
             <LeftSideChat />
           </div>
 
-          <div className="hidden lg:block w-2/3  chat-bg rounded-r-lg ">
+          <div className="hidden lg:flex justify-center items-center w-2/3 bg-slate-200 rounded-r-lg ">
             <RightSideChat />
           </div>
         </div>

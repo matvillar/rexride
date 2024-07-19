@@ -4,7 +4,7 @@ type Props = {
   size?: number;
 };
 
-const LoadingLogo = ({ size = 100 }: Props) => {
+const LoadingLogo = ({ size = 80 }: Props) => {
   return (
     <div className="h-full w-full flex justify-center items-center">
       <Image
@@ -12,7 +12,7 @@ const LoadingLogo = ({ size = 100 }: Props) => {
         alt="logo"
         width={size}
         height={size}
-        className="animate-spin duration-700"
+        className="animate-pulse duration-700"
       />
     </div>
   );

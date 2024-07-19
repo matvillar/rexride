@@ -37,6 +37,10 @@ export const createRide = async ({
       rideType: rideEvent.rideType,
       userId,
     });
+    // Add ride to user's rides array
+    user.rides.push(newRide._id); // Use newRide._id instead of JSON.parse(JSON.stringify(newRide))
+    await user.save(); // Save the updated user document
+
     return JSON.parse(JSON.stringify(newRide));
   } catch (error) {
     handleError(error);
@@ -117,5 +121,16 @@ export const deleteRideById = async ({ rideId, path }: DeleteRideProps) => {
   } catch (error) {
     handleError(error);
     return { success: false };
+  }
+};
+
+export const getRidesDataByRideId = async (ridesId: string[]) => {
+  try {
+    await connect();
+    const rides = await Ride.find({ _id: { $in: ridesId } });
+
+    return JSON.parse(JSON.stringify(rides));
+  } catch (error) {
+    handleError(error);
   }
 };

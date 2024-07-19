@@ -49,7 +49,7 @@ export default async function Home() {
         id="search-rides"
         className="bg-red-50 max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-0 w-full my-8 flex flex-col gap-8 rounded-lg"
       >
-        <h2 className=" font-bold text-[32px] p-5 leading-[40px] lg:text-[36px] lg:leading-[44px] xl:text-[40px] xl:leading-[48px]">
+        <h2 className="font-bold text-[32px] p-5 leading-[40px] lg:text-[36px] lg:leading-[44px] xl:text-[40px] xl:leading-[48px]">
           Find Your Ride
         </h2>
 
@@ -66,16 +66,4 @@ export default async function Home() {
       </section>
     </>
   );
-}
-
-{
-  /* <main className="w-full flex flex-col">
-<section className="mx-auto py-5">
-  <div className="flex flex-col w-full mt-5 mb-30 lg:flex-row-reverse gap-10 lg:mt-11">
-    <HomeSlides />
-    <SearchRide />
-  </div>
-  <SuggestedRides />
-</section>
-</main> */
 }

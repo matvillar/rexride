@@ -1,6 +1,6 @@
 import RideForm from '@/components/forms/RideForm';
 import { getRideById } from '@/lib/actions/ride.actions';
-import { UpdateRideProps } from '@/lib/constants/types/UpdateEventParams';
+import { UpdateRideProps } from '@/lib/constants/types/UpdateRideProps';
 
 import { auth } from '@clerk/nextjs/server';
 import React from 'react';

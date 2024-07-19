@@ -23,10 +23,12 @@ const DeleteModal = ({ rideId }: { rideId: string }) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
-        <Button className="hover:bg-transparent hover:text-red-500">
-          <RiDeleteBin5Fill size={24} />
-        </Button>
+      <AlertDialogTrigger asChild>
+        <div className="inline-block">
+          <Button className="hover:bg-transparent hover:text-red-500">
+            <RiDeleteBin5Fill size={24} />
+          </Button>
+        </div>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

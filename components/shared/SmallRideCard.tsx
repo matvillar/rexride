@@ -55,18 +55,20 @@ const SmallRideCard = ({ data }: any) => {
                   {formatTimeFromIso(ride.startTime)}
                 </p>
               </div>
-              <Button
-                asChild
-                size="lg"
-                className="flex w-full rounded-full items-center  bg-red-500 lg:w-fit hover:bg-red-600 transition-colors duration-300 ease-in-out text-white font-semibold text-lg"
-              >
-                <Link
-                  href={`/rides/${ride._id}`}
-                  className="font-semibold text-lg"
+              <div className="flex justify-center p-2">
+                <Button
+                  asChild
+                  size="lg"
+                  className="flex w-full rounded-full  items-center  bg-red-500 lg:w-fit hover:bg-red-600 transition-colors duration-300 ease-in-out text-white font-semibold text-lg"
                 >
-                  Check Ride
-                </Link>
-              </Button>
+                  <Link
+                    href={`/rides/${ride._id}`}
+                    className="font-semibold text-lg"
+                  >
+                    Check Ride
+                  </Link>
+                </Button>
+              </div>
             </div>
           </li>
         );

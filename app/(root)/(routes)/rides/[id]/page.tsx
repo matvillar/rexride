@@ -79,11 +79,11 @@ const RideDetails = async ({ params: { id } }: SearchParams) => {
                     </div>
                   </div>
                 ) : (
-                  <Link href={`/messages/${ride.userId._id}`}>
-                    <Button className="hover:bg-transparent hover:text-blue-500">
+                  <Button className="hover:bg-transparent hover:text-blue-500">
+                    <Link href={`/messages/${ride.userId._id}`}>
                       <RiMessage2Fill size={24} />
-                    </Button>
-                  </Link>
+                    </Link>
+                  </Button>
                 )}
               </div>
               <div className="flex flex-col items-start px-10">

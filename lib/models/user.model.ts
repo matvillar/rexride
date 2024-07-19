@@ -14,10 +14,10 @@ const userSchema = new mongoose.Schema({
     default: UserTypeEnum.PASSENGER,
     required: true,
   },
-  isOnboard: { type: Boolean, required: true },
-  chats: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chat' }],
+  isOnboard: { type: Boolean },
   createdAt: { type: Date, default: Date.now },
   reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
+  rides: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ride' }],
 });
 
 const User = mongoose.models.User || mongoose.model('User', userSchema);

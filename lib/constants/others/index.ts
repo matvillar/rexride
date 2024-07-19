@@ -30,9 +30,4 @@ export const headerLinks = [
     href: '/profile',
     icon: FaUser,
   },
-  {
-    label: 'About',
-    href: '/about-us',
-    icon: GiAbstract028,
-  },
 ];
