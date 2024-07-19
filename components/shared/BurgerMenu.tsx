@@ -6,14 +6,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { IoMdMenu } from 'react-icons/io';
+
 import Link from 'next/link';
 import Item from './Item';
-import { IoHomeSharp } from 'react-icons/io5';
-import { FaUser } from 'react-icons/fa';
-import { GiAbstract028 } from 'react-icons/gi';
-import { AiFillMessage } from 'react-icons/ai';
-import { FaSearch } from 'react-icons/fa';
+
 import { HiMenuAlt3 } from 'react-icons/hi';
 import { headerLinks } from '@/lib/constants/others';
 
