@@ -1,3 +1,4 @@
+'use client';
 import { IRide } from '@/lib/constants/interfaces/IRide';
 import { useEffect } from 'react';
 import { Button } from '../ui/button';
