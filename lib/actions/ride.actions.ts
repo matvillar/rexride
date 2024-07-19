@@ -11,6 +11,7 @@ import { GetAllRidesParams } from '../constants/types/GetAllRidesParams';
 import { DeleteRideProps } from '../constants/types/DeleteRideProps';
 import { revalidatePath } from 'next/cache';
 import { UpdateRideParams } from '../constants/types/UpdateRideParams';
+import { GetRidesByUserParams } from '../constants/types/GetRidesByUserParams';
 
 const fillRideDetails = async (query: any) => {
   return query.populate({
@@ -19,6 +20,43 @@ const fillRideDetails = async (query: any) => {
     select: '_id name email phone userImage',
   });
 };
+
+const populateRide = (query: any) => {
+  return query.populate({
+    path: 'userId',
+    model: User,
+    select: '_id firstName email name',
+  });
+  // .populate({ path: 'category', model: Category, select: '_id name' })
+};
+
+export async function getRidesByUser({
+  userId,
+  limit = 6,
+  page,
+}: GetRidesByUserParams) {
+  try {
+    await connect();
+
+    const conditions = { userId };
+    const skipAmount = (page - 1) * limit;
+
+    const ridesQuery = Ride.find(conditions)
+      .sort({ createdAt: 'desc' })
+      .skip(skipAmount)
+      .limit(limit);
+
+    const rides = await populateRide(ridesQuery);
+    const ridesCount = await Ride.countDocuments(conditions);
+
+    return {
+      data: JSON.parse(JSON.stringify(rides)),
+      totalPages: Math.ceil(ridesCount / limit),
+    };
+  } catch (error) {
+    handleError(error);
+  }
+}
 
 export const createRide = async ({
   userId,

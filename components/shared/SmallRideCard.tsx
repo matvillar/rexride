@@ -25,7 +25,7 @@ const SmallRideCard = ({ data }: any) => {
               <div className="flex mb-3">
                 <Image
                   className="rounded-full border-4 border-black"
-                  src={ride.userId.userImage}
+                  src={ride.userId.userImage || '/driverRide.svg'}
                   alt="User Pic"
                   width={50}
                   height={50}

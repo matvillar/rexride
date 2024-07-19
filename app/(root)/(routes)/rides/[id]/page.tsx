@@ -19,6 +19,7 @@ import { RiMessage2Fill } from 'react-icons/ri';
 import { IoCalendarSharp } from 'react-icons/io5';
 import Link from 'next/link';
 import DeleteModal from '@/components/shared/DeleteModal';
+import ReserveSeatBtn from '@/components/shared/ReserveSeatBtn';
 
 const RideDetails = async ({ params: { id } }: SearchParams) => {
   const ride = await getRideById(id);
@@ -127,7 +128,7 @@ const RideDetails = async ({ params: { id } }: SearchParams) => {
                 <p className="ml-2 font-semibold">$ {ride.pricePerSeat}</p>
               </div>
               {currSessionUserId !== ride.userId._id && (
-                <Button className="w-full mt-5">Reserve a Seat</Button>
+                <ReserveSeatBtn ride={ride} />
               )}
             </div>
           </div>

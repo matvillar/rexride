@@ -11,15 +11,25 @@ import { auth } from '@clerk/nextjs/server';
 import { fetchUserInfo } from '@/lib/actions/user.actions';
 import { toCapitalize } from '@/lib/utils';
 import Collection from '@/components/shared/Collection';
-import { getRidesDataByRideId } from '@/lib/actions/ride.actions';
+import {
+  getRidesByUser,
+  getRidesDataByRideId,
+} from '@/lib/actions/ride.actions';
 import SmallRideCard from '@/components/shared/SmallRideCard';
 import { IRide } from '@/lib/constants/interfaces/IRide';
 import MyRexRidesCard from '@/components/shared/MyRexRidesCard';
+import { get } from 'http';
 
 const Profile = async () => {
   const { sessionClaims } = auth();
   const currSessionUserId = sessionClaims?.userId as string;
   const user = await fetchUserInfo(currSessionUserId);
+
+  const getRideByUser = await getRidesByUser({
+    userId: currSessionUserId,
+    limit: 6,
+    page: 1,
+  });
 
   const ridesData = await getRidesDataByRideId(user.rides);
 
@@ -72,13 +82,15 @@ const Profile = async () => {
             </Button>
           </div>
           <div className="flex gap-5 flex-col my-8 lg:flex-row">
-            {ridesData.map((ride: IRide) => {
-              return (
-                <>
-                  <MyRexRidesCard data={ride} />
-                </>
-              );
-            })}
+            <Collection
+              data={getRideByUser?.data}
+              noRidesTitle="You have not created any rides yet!"
+              noRidesForSpecificLocation="No Rides for this specific location, Come back later!"
+              collectionType="User_Rides"
+              limit={4}
+              page={1}
+              totalPage={2}
+            />
           </div>
         </section>
       </div>
@@ -87,3 +99,13 @@ const Profile = async () => {
 };
 
 export default Profile;
+
+{
+  /* {ridesData.map((ride: IRide) => {
+              return (
+                <>
+                  <MyRexRidesCard data={ride} />
+                </>
+              );
+            })} */
+}
