@@ -1,22 +1,14 @@
-import mongoose from 'mongoose';
-import { IReservation } from '../constants/interfaces/IReservation';
-import { ReservationItem } from '../constants/types/ReservationItem';
+import { Schema, model, models, Document } from 'mongoose';
 
-const reservationSchema = new mongoose.Schema({
+const reservationSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
   stripeId: { type: String, required: true, unique: true },
-  totalAmount: { type: String },
-  ride: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Ride',
-  },
-  buyer: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  },
+  totalPayment: { type: String },
+  ride: { type: Schema.Types.ObjectId, ref: 'Ride', required: true },
+  buyer: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 });
+
 const Reservation =
-  mongoose.models.Reservation ||
-  mongoose.model('Reservation', reservationSchema);
+  models.Reservation || model('Reservation', reservationSchema);
 
 export default Reservation;

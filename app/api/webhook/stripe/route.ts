@@ -1,6 +1,7 @@
 import stripe from 'stripe';
 import { NextResponse } from 'next/server';
-import { createReservationInfo } from '@/components/shared/CheckoutReservation';
+
+import { createReservationInfo } from '@/lib/actions/reservation.actions';
 
 export async function POST(request: Request) {
   const body = await request.text();
