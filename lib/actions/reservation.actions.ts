@@ -8,57 +8,51 @@ import { CreateReservationInfoParams } from '../constants/types/CreateReservatio
 import { connect } from '../mongoose';
 import Reservation from '../models/reservation.model';
 
-export const checkoutReservation = async (
-  reservation: CheckoutReservationParams
-) => {
+export const checkoutOrder = async (order: CheckoutReservationParams) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-  const pricePerSeat = Number(reservation.price) * 100;
+  const price = order.price * 100;
   try {
-    // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
           price_data: {
             currency: 'usd',
-            unit_amount: pricePerSeat,
+            unit_amount: price,
             product_data: {
-              name: reservation.rideTitle,
+              name: order.rideTitle,
             },
           },
           quantity: 1,
         },
       ],
       metadata: {
-        rideId: reservation.rideId,
-        buyerId: reservation.buyerId,
+        rideId: order.rideId,
+        buyerId: order.buyerId,
       },
       mode: 'payment',
       success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/profile`,
       cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/`,
     });
+
+    // redirect
     redirect(session.url!);
-  } catch (err) {
-    handleError(err);
+  } catch (error) {
+    throw error;
   }
 };
 
-export const createReservationInfo = async (
-  reservation: CreateReservationInfoParams
-) => {
+export const createReservation = async (order: CreateReservationInfoParams) => {
   try {
     await connect();
-
     const newReservation = await Reservation.create({
-      ...reservation,
-      ride: reservation.rideId,
-      buyer: reservation.buyerId,
+      ...order,
+      ride: order.rideId,
+      buyer: order.buyerId,
     });
-
-    console.log('Getting new reservation', newReservation);
 
     return JSON.parse(JSON.stringify(newReservation));
   } catch (error) {
-    handleError(error);
+    throw error;
   }
 };

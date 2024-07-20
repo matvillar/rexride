@@ -14,14 +14,14 @@ type Props = {
 const ReserveSeatBtn = ({ ride }: Props) => {
   const { user } = useUser();
   const userId = user?.publicMetadata.userId as string;
+
   const hasRideStarted = ride.status === RideStatusEnum.IN_PROGRESS;
+  const noMoreSeats = ride.seatsAvailable === 0;
 
   return (
     <div className="flex items-center justify-center gap-3">
       {hasRideStarted ? (
-        <p className="p-2 text-red-500">
-          Sorry but this ride has been Departed
-        </p>
+        <p className="p-2 text-red-500">Sorry but this ride has Departed</p>
       ) : (
         <>
           <SignedOut>

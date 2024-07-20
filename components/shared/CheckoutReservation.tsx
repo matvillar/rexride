@@ -1,17 +1,16 @@
 'use client';
-import { IRide } from '@/lib/constants/interfaces/IRide';
-import { useEffect } from 'react';
-import { Button } from '../ui/button';
 import { loadStripe } from '@stripe/stripe-js';
-
-import { checkoutReservation } from '@/lib/actions/reservation.actions';
-
-loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+import { IRide } from '@/lib/constants/interfaces/IRide';
+import { Button } from '../ui/button';
+import { useEffect } from 'react';
+import { checkoutOrder } from '@/lib/actions/reservation.actions';
 
 type Props = {
   ride: IRide;
   userId: string;
 };
+
+loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 const CheckoutReservation = ({ ride, userId }: Props) => {
   useEffect(() => {
@@ -28,24 +27,20 @@ const CheckoutReservation = ({ ride, userId }: Props) => {
     }
   }, []);
 
-  const onCheckOut = async () => {
+  const onCheckout = async () => {
     const order = {
-      rideTitle: ride.userId.name,
+      rideTitle: ride.pickupLocation,
       rideId: ride._id,
       price: ride.pricePerSeat,
       buyerId: userId,
     };
 
-    await checkoutReservation(order);
+    await checkoutOrder(order);
   };
+
   return (
-    <form action={onCheckOut} method="post">
-      <Button
-        type="submit"
-        role="link"
-        size="lg"
-        className="rounded-full w-fit"
-      >
+    <form action={onCheckout} method="post">
+      <Button type="submit" role="link" size="lg">
         Reserve Seat
       </Button>
     </form>
