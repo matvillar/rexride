@@ -1,4 +1,4 @@
-export type CheckoutOrderParams = {
+export type CheckoutReservationParams = {
   rideTitle: string;
   rideId: string;
   price: number;
