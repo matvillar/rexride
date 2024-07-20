@@ -8,11 +8,11 @@ import Reservation from '../models/reservation.model';
 import { connect } from '../mongoose';
 import { handleError } from '../utils';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
 export const checkoutReservation = async (
   reservation: CheckoutReservationParams
 ) => {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
   const pricePerSeat = Number(reservation.price) * 100;
   try {
     // Create Checkout Sessions from body params.
@@ -37,10 +37,9 @@ export const checkoutReservation = async (
       success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/profile`,
       cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/`,
     });
-    return session.url; // Return URL instead of redirect
+    redirect(session.url!);
   } catch (err) {
     handleError(err);
-    return null;
   }
 };
 
@@ -61,6 +60,5 @@ export const createReservationInfo = async (
     return JSON.parse(JSON.stringify(newReservation));
   } catch (error) {
     handleError(error);
-    return null;
   }
 };

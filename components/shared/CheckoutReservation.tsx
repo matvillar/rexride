@@ -5,10 +5,11 @@ import { Button } from '../ui/button';
 import { loadStripe } from '@stripe/stripe-js';
 import { checkoutReservation } from '@/lib/actions/reservation.actions';
 
-// Initialize Stripe outside of a component’s render to avoid recreating the instance on every render
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
-);
+import { connect } from '@/lib/mongoose';
+import { handleError } from '@/lib/utils';
+import Reservation from '@/lib/models/reservation.model';
+
+loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 type Props = {
   ride: IRide;
@@ -17,6 +18,7 @@ type Props = {
 
 const CheckoutReservation = ({ ride, userId }: Props) => {
   useEffect(() => {
+    // Check to see if this is a redirect back from Checkout
     const query = new URLSearchParams(window.location.search);
     if (query.get('success')) {
       console.log('Order placed! You will receive an email confirmation.');
@@ -37,26 +39,19 @@ const CheckoutReservation = ({ ride, userId }: Props) => {
       buyerId: userId,
     };
 
-    // Create checkout session and get the session URL
-    const sessionUrl = await checkoutReservation(reservation);
-
-    // If session URL exists, use Stripe to redirect to the checkout page
-    if (sessionUrl) {
-      const stripe = await stripePromise;
-      stripe?.redirectToCheckout({ sessionId: sessionUrl });
-    }
+    await checkoutReservation(reservation);
   };
-
   return (
-    <Button
-      type="button"
-      onClick={onCheckOut}
-      role="link"
-      size="lg"
-      className="rounded-full w-fit"
-    >
-      Reserve Seat
-    </Button>
+    <form action={onCheckOut} method="post">
+      <Button
+        type="submit"
+        role="link"
+        size="lg"
+        className="rounded-full w-fit"
+      >
+        Reserve Seat
+      </Button>
+    </form>
   );
 };
 
