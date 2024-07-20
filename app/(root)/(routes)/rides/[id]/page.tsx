@@ -3,8 +3,10 @@ import { SearchParams } from '@/lib/constants/types/SearchParams';
 import { getRideById } from '@/lib/actions/ride.actions';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { RiDeleteBin5Fill } from 'react-icons/ri';
 import { FaArrowRight } from 'react-icons/fa6';
 import { FaEdit } from 'react-icons/fa';
+import { IoIosArrowForward } from 'react-icons/io';
 import { IoLocation } from 'react-icons/io5';
 import { FaCircle } from 'react-icons/fa';
 import {
@@ -23,7 +25,6 @@ const RideDetails = async ({ params: { id } }: SearchParams) => {
   const ride = await getRideById(id);
   const { sessionClaims } = auth();
   const currSessionUserId = sessionClaims?.userId as string;
-
   if (!ride) {
     return (
       <div className="max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-0 font-bold text-[28px] leading-[36px] md:text-[36px] md:leading-[44px] text-center sm:text-left">

@@ -1,12 +1,12 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { CheckoutReservationParams } from '@/lib/constants/types/CheckoutReservationParams';
+import { CheckoutReservationParams } from '../constants/types/CheckoutReservationParams';
 import Stripe from 'stripe';
-import { CreateReservationInfoParams } from '../constants/types/CreateReservationInfoParams';
-import Reservation from '../models/reservation.model';
-import { connect } from '../mongoose';
 import { handleError } from '../utils';
+import { CreateReservationInfoParams } from '../constants/types/CreateReservationInfoParams';
+import { connect } from '../mongoose';
+import Reservation from '../models/reservation.model';
 
 export const checkoutReservation = async (
   reservation: CheckoutReservationParams

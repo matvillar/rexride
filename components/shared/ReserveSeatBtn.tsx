@@ -2,7 +2,7 @@
 import { IRide } from '@/lib/constants/interfaces/IRide';
 import React from 'react';
 import { RideStatusEnum } from '@/lib/constants/enums/RideStatusEnum';
-import { SignedIn, SignedOut, useUser } from '@clerk/nextjs';
+import { SignedIn, SignedOut, useUser } from '@clerk/clerk-react';
 import { Button } from '../ui/button';
 import Link from 'next/link';
 import CheckoutReservation from './CheckoutReservation';

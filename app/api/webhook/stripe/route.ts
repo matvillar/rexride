@@ -1,6 +1,5 @@
 import stripe from 'stripe';
 import { NextResponse } from 'next/server';
-
 import { createReservationInfo } from '@/lib/actions/reservation.actions';
 
 export async function POST(request: Request) {

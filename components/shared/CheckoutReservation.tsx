@@ -3,11 +3,8 @@ import { IRide } from '@/lib/constants/interfaces/IRide';
 import { useEffect } from 'react';
 import { Button } from '../ui/button';
 import { loadStripe } from '@stripe/stripe-js';
-import { checkoutReservation } from '@/lib/actions/reservation.actions';
 
-import { connect } from '@/lib/mongoose';
-import { handleError } from '@/lib/utils';
-import Reservation from '@/lib/models/reservation.model';
+import { checkoutReservation } from '@/lib/actions/reservation.actions';
 
 loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -32,14 +29,14 @@ const CheckoutReservation = ({ ride, userId }: Props) => {
   }, []);
 
   const onCheckOut = async () => {
-    const reservation = {
+    const order = {
       rideTitle: ride.userId.name,
       rideId: ride._id,
       price: ride.pricePerSeat,
       buyerId: userId,
     };
 
-    await checkoutReservation(reservation);
+    await checkoutReservation(order);
   };
   return (
     <form action={onCheckOut} method="post">
