@@ -9,23 +9,42 @@ import {
 import { IoIosArrowForward } from 'react-icons/io';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { IUser } from '@/lib/constants/interfaces/IUser';
 
 import { auth } from '@clerk/nextjs/server';
+import { getUserById } from '@/lib/actions/user.actions';
+type Props = {
+  data: any;
+  collectionType?: string;
+};
 
-const SmallRideCard = ({ data }: any) => {
+const SmallRideCard = async ({ data, collectionType }: Props) => {
   const { sessionClaims } = auth();
   const currSessionUserId = sessionClaims?.userId as string;
+  const currUser = await getUserById(currSessionUserId);
 
   return (
     <>
       {data.map((ride: IRide) => {
+        const url =
+          collectionType === 'User_Rides_Created'
+            ? `/reservati?rideId=${ride._id}` // Change this to the actual link for User_Rides_Created
+            : collectionType === 'User_Bookings_Made'
+              ? `/rides/${ride._id}`
+              : collectionType === 'All_Rides'
+                ? `/rides/${ride._id}`
+                : `/rides/${ride._id}`; // A fallback or default URL if needed
         return (
           <li key={ride._id} className="flex justify-center">
             <div className="group min-h-52 min-w-72 relative flex w-full flex-col overflow-hidden bg-white border-4 border-black rounded-lg p-4 shadow-lg transition-all hover:shadow-xl hover:-translate-y-1">
               <div className="flex mb-3">
                 <Image
                   className="rounded-full border-4 border-black"
-                  src={ride.userId.userImage || '/driverRide.svg'}
+                  src={
+                    ride.userId.userImage ||
+                    currUser.userImage ||
+                    '/driverRide.svg'
+                  }
                   alt="User Pic"
                   width={50}
                   height={50}
@@ -61,11 +80,8 @@ const SmallRideCard = ({ data }: any) => {
                   size="lg"
                   className="flex w-full rounded-full  items-center  bg-red-500 lg:w-fit hover:bg-red-600 transition-colors duration-300 ease-in-out text-white font-semibold text-lg"
                 >
-                  <Link
-                    href={`/rides/${ride._id}`}
-                    className="font-semibold text-lg"
-                  >
-                    Check Ride
+                  <Link href={url} className="font-semibold text-lg">
+                    View Details
                   </Link>
                 </Button>
               </div>

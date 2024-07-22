@@ -8,30 +8,42 @@ import { IoChatboxEllipsesSharp } from 'react-icons/io5';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { auth } from '@clerk/nextjs/server';
-import { fetchUserInfo } from '@/lib/actions/user.actions';
+import { getUserById } from '@/lib/actions/user.actions';
 import { toCapitalize } from '@/lib/utils';
 import Collection from '@/components/shared/Collection';
 import {
   getRidesByUser,
   getRidesDataByRideId,
 } from '@/lib/actions/ride.actions';
-import SmallRideCard from '@/components/shared/SmallRideCard';
-import { IRide } from '@/lib/constants/interfaces/IRide';
+
+import { getReservationByUser } from '@/lib/actions/reservation.actions';
+import { IReservation } from '@/lib/constants/interfaces/IReservation';
 import MyRexRidesCard from '@/components/shared/MyRexRidesCard';
-import { get } from 'http';
+import { redirect } from 'next/navigation';
 
 const Profile = async () => {
   const { sessionClaims } = auth();
   const currSessionUserId = sessionClaims?.userId as string;
-  const user = await fetchUserInfo(currSessionUserId);
+  if (!currSessionUserId) {
+    return null;
+  }
+
+  const user = await getUserById(currSessionUserId);
+
+  const reservations = await getReservationByUser({
+    userId: currSessionUserId,
+    page: 1,
+  });
+
+  const scheduledReservations =
+    reservations?.data.map((reservation: IReservation) => reservation.rideId) ||
+    [];
 
   const getRideByUser = await getRidesByUser({
     userId: currSessionUserId,
     limit: 6,
     page: 1,
   });
-
-  const ridesData = await getRidesDataByRideId(user.rides);
 
   return (
     <>
@@ -72,7 +84,7 @@ const Profile = async () => {
         <section className="flex flex-col bg-red-50 bg-cover bg-center p-5  md:py-10 mt-4 justify-between lg:flex">
           <div className="flex justify-between">
             <h2 className="font-bold text-3xl lg:text-left text-center px-5">
-              My Rides
+              My Rides | Driver
             </h2>
             <Button
               asChild
@@ -86,10 +98,24 @@ const Profile = async () => {
               data={getRideByUser?.data}
               noRidesTitle="You have not created any rides yet!"
               noRidesForSpecificLocation="No Rides for this specific location, Come back later!"
-              collectionType="User_Rides"
+              collectionType="User_Rides_Created"
               limit={4}
               page={1}
               totalPage={2}
+            />
+          </div>
+
+          <h2 className="font-bold text-3xl lg:text-left text-center px-5">
+            Reserved Rides | Passenger
+          </h2>
+          <div className="flex gap-5 flex-col my-8 lg:flex-row">
+            <Collection
+              data={scheduledReservations}
+              noRidesTitle="You have not scheduled any rides yet!"
+              noRidesForSpecificLocation="No Rides for this specific location, Come back later!"
+              collectionType="User_Bookings_Made"
+              limit={4}
+              page={1}
             />
           </div>
         </section>
@@ -99,13 +125,3 @@ const Profile = async () => {
 };
 
 export default Profile;
-
-{
-  /* {ridesData.map((ride: IRide) => {
-              return (
-                <>
-                  <MyRexRidesCard data={ride} />
-                </>
-              );
-            })} */
-}

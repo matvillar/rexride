@@ -42,11 +42,24 @@ export async function deleteUser(clerkId: string) {
   }
 }
 
+export async function getUserById(userId: string) {
+  try {
+    await connect();
+
+    const user = await User.findById(userId);
+
+    if (!user) throw new Error('User not found');
+    return JSON.parse(JSON.stringify(user));
+  } catch (error) {
+    handleError(error);
+  }
+}
+
 export async function fetchUserInfo(userId: string) {
   await connect();
   try {
-    const user = await User.findOne({ id: userId });
-    return user;
+    const user = await User.findById({ id: userId });
+    return JSON.parse(JSON.stringify(user));
   } catch (err) {
     console.error('Error fetching user info: ', err);
   }

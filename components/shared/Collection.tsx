@@ -5,6 +5,7 @@ import SmallRideCard from './SmallRideCard';
 const Collection = async ({
   data,
   noRidesTitle,
+
   noRidesForSpecificLocation,
   collectionType,
   limit,
@@ -17,7 +18,7 @@ const Collection = async ({
       {data.length > 0 ? (
         <div className="flex flex-col items-center gap-10">
           <ul className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4 xl:gap-10">
-            <SmallRideCard data={data} />
+            <SmallRideCard data={data} collectionType={collectionType} />
           </ul>
         </div>
       ) : (

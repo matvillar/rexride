@@ -4,16 +4,24 @@ import HomeSlides from '../../components/shared/HomeSlides';
 import SearchRide from '../../components/shared/SearchRide';
 import SuggestedRides from '../../components/shared/SuggestedRides';
 import Footer from '../../components/shared/Footer';
-import { currentUser } from '@clerk/nextjs/server';
-import { fetchUserInfo } from '@/lib/actions/user.actions';
+import { auth } from '@clerk/nextjs/server';
+import { SignedOut } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import { use } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Collection from '@/components/shared/Collection';
 import { getAllRides } from '@/lib/actions/ride.actions';
+import { getUserById } from '@/lib/actions/user.actions';
 
 export default async function Home() {
+  const { sessionClaims } = auth();
+  const currSessionUserId = sessionClaims?.userId as string;
+  if (!currSessionUserId) return null;
+
+  const user = await getUserById(currSessionUserId);
+  if (!user) return null;
+
   const rides = await getAllRides({
     query: '',
     limit: 4,

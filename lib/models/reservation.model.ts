@@ -4,7 +4,11 @@ import { ReservationItem } from '../constants/types/ReservationItem';
 
 const reservationSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
-
+  stripeId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   totalAmount: { type: String },
   rideId: {
     type: mongoose.Schema.Types.ObjectId,
