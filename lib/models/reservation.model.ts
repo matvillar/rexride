@@ -4,16 +4,17 @@ import { ReservationItem } from '../constants/types/ReservationItem';
 
 const reservationSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
-  stripeId: { type: String, required: true, unique: true },
+
   totalAmount: { type: String },
-  ride: {
+  rideId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Ride',
   },
-  buyer: {
+  buyerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
+  seatsReserved: { type: Number, default: 1 },
 });
 const Reservation =
   mongoose.models.Reservation ||

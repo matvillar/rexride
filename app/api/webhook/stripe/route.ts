@@ -1,40 +1,42 @@
-import stripe from 'stripe';
-import { NextResponse } from 'next/server';
+import Stripe from 'stripe';
+import { NextResponse, NextRequest } from 'next/server';
 import { createReservation } from '@/lib/actions/reservation.actions';
 
-export async function POST(request: Request) {
-  const body = await request.text();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-  const sig = request.headers.get('stripe-signature') as string;
-  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+export async function POST(req: NextRequest, res: NextResponse) {
+  const payload = await req.text();
+  const response = JSON.parse(payload);
 
+  const sig = req.headers.get('Stripe-Signature')!;
   let event;
-
   try {
-    event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
-  } catch (err) {
-    return NextResponse.json({ message: 'Webhook error', error: err });
+    event = stripe.webhooks.constructEvent(
+      payload,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ status: 'Webhook Error', error });
   }
 
-  // Get the ID and type
-  const eventType = event.type;
-
-  // CREATE
-  if (eventType === 'checkout.session.completed') {
+  if (event.type === 'checkout.session.completed') {
     const { id, amount_total, metadata } = event.data.object;
-    console.log('metadata', metadata);
 
     const order = {
-      stripeId: id,
       rideId: metadata?.rideId || '',
       buyerId: metadata?.buyerId || '',
+      seatsReserved: 1,
       totalAmount: amount_total ? (amount_total / 100).toString() : '0',
       createdAt: new Date(),
     };
 
-    const newOrder = await createReservation(order);
-    return NextResponse.json({ message: 'OK', order: newOrder });
+    const newReservation = await createReservation(order);
+    console.log('newReservation', newReservation);
+    console.log('payload', payload, id, amount_total, metadata);
+    return NextResponse.json({ message: 'Ok', order: newReservation });
   }
-
+  console.log('Event:', event.type);
   return new Response('', { status: 200 });
 }

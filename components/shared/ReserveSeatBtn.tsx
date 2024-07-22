@@ -5,7 +5,7 @@ import { RideStatusEnum } from '@/lib/constants/enums/RideStatusEnum';
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-react';
 import { Button } from '../ui/button';
 import Link from 'next/link';
-import CheckoutReservation from './CheckoutReservation';
+import CheckoutReservation from '@/components/forms/CheckoutReservation';
 
 type Props = {
   ride: IRide;
@@ -13,8 +13,7 @@ type Props = {
 
 const ReserveSeatBtn = ({ ride }: Props) => {
   const { user } = useUser();
-  const userId = user?.publicMetadata.userId as string;
-
+  const userId = user?.publicMetadata?.userId as string;
   const hasRideStarted = ride.status === RideStatusEnum.IN_PROGRESS;
   const noMoreSeats = ride.seatsAvailable === 0;
 
@@ -39,3 +38,9 @@ const ReserveSeatBtn = ({ ride }: Props) => {
 };
 
 export default ReserveSeatBtn;
+
+{
+  /* <Button asChild className="rounded-full" size="lg">
+<Link href={`/rides/${ride._id}/reserve-seat`}>Reserve Seat</Link>
+</Button> */
+}

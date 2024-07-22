@@ -1,27 +1,29 @@
 'use server';
 
-import { redirect } from 'next/navigation';
+import { CreateReservationInfoParams } from '../constants/types/CreateReservationInfoParams';
+import Reservation from '../models/reservation.model';
+import { handleError } from '../utils';
+import { connect } from '../mongoose';
+import User from '../models/user.model';
 import { CheckoutReservationParams } from '../constants/types/CheckoutReservationParams';
 import Stripe from 'stripe';
-import { handleError } from '../utils';
-import { CreateReservationInfoParams } from '../constants/types/CreateReservationInfoParams';
-import { connect } from '../mongoose';
-import Reservation from '../models/reservation.model';
+import { redirect } from 'next/navigation';
 
 export const checkoutOrder = async (order: CheckoutReservationParams) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-  const price = order.price * 100;
+  const price = Number(order.price * 100);
   try {
+    // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
           price_data: {
             currency: 'usd',
-            unit_amount: price,
             product_data: {
               name: order.rideTitle,
             },
+            unit_amount: price,
           },
           quantity: 1,
         },
@@ -30,29 +32,33 @@ export const checkoutOrder = async (order: CheckoutReservationParams) => {
         rideId: order.rideId,
         buyerId: order.buyerId,
       },
-      mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/profile`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/`,
-    });
 
-    // redirect
+      mode: 'payment',
+      success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/?success=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/?canceled=true`,
+    });
+    console.log('session', session);
     redirect(session.url!);
   } catch (error) {
     throw error;
   }
 };
 
-export const createReservation = async (order: CreateReservationInfoParams) => {
+export const createReservation = async (
+  reservation: CreateReservationInfoParams
+) => {
   try {
     await connect();
+    // const rideOwner = await User.findById(reservation);
     const newReservation = await Reservation.create({
-      ...order,
-      ride: order.rideId,
-      buyer: order.buyerId,
+      rideId: reservation.rideId,
+      buyerId: reservation.buyerId,
+      seatsReserved: reservation.seatsReserved,
+      totalAmount: reservation.totalAmount,
+      createdAt: reservation.createdAt,
     });
-
     return JSON.parse(JSON.stringify(newReservation));
   } catch (error) {
-    throw error;
+    handleError(error);
   }
 };
