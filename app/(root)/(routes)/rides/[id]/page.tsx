@@ -26,7 +26,6 @@ const RideDetails = async ({ params: { id } }: SearchParams) => {
   const { sessionClaims } = auth();
   const currSessionUserId = sessionClaims?.userId as string;
 
-  if (!currSessionUserId) return null;
   if (!ride) {
     return (
       <div className="max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-0 font-bold text-[28px] leading-[36px] md:text-[36px] md:leading-[44px] text-center sm:text-left">

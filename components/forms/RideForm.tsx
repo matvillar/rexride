@@ -23,7 +23,7 @@ import * as z from 'zod';
 import { RideDefaultValues } from '@/lib/constants/others/RideDefaultValues';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useState } from 'react';
+
 import { createRide } from '@/lib/actions/ride.actions';
 import { useRouter } from 'next/navigation';
 import { updateRide } from '@/lib/actions/ride.actions';
@@ -53,7 +53,7 @@ const RideForm = ({ userId, type, ride, rideId }: RideFormParams) => {
         const newRide = await createRide({
           userId,
           rideEvent: rideData,
-          path: '/profile',
+          path: '/rides',
         });
         if (newRide) {
           form.reset();
