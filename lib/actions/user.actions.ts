@@ -47,6 +47,8 @@ export async function getUserById(userId: string) {
     await connect();
 
     const user = await User.findById(userId);
+    // we need to wait for user to return so we can not crash everything do not show error
+    if (!user) return null;
 
     return JSON.parse(JSON.stringify(user));
   } catch (error) {

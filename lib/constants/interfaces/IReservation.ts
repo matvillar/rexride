@@ -19,7 +19,10 @@ export interface IReservationItem {
   createdAt: Date;
   totalAmount: string;
   rideTitle: string;
-  buyer: string;
+  buyer: {
+    _id: string;
+    name: string;
+  };
   rideId: string;
   seatsReserved: string;
 }

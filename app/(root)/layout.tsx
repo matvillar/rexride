@@ -4,6 +4,7 @@ import '@/app/globals.css';
 
 import TopBar from '@/components/shared/TopBar';
 import Footer from '@/components/shared/Footer';
+import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
   title: 'RexRide',
@@ -21,7 +22,7 @@ export default function RootLayout({
   return (
     <section className="flex h-screen flex-col">
       <TopBar />
-
+      <Toaster richColors />
       <main className="flex-1">{children}</main>
 
       <Footer />

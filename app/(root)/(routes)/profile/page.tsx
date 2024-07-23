@@ -24,6 +24,7 @@ import { redirect } from 'next/navigation';
 const Profile = async () => {
   const { sessionClaims } = auth();
   const currSessionUserId = sessionClaims?.userId as string;
+
   if (!currSessionUserId) {
     return null;
   }
@@ -31,9 +32,10 @@ const Profile = async () => {
   const user = await getUserById(currSessionUserId);
 
   const reservations = await getReservationByUser({
-    userId: currSessionUserId,
+    userId: user._id,
     page: 1,
   });
+  console.log(reservations);
 
   const scheduledReservations =
     reservations?.data.map((reservation: IReservation) => reservation.rideId) ||

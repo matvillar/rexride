@@ -4,11 +4,11 @@ import { createReservation } from '@/lib/actions/reservation.actions';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: Request) {
   const payload = await req.text();
   const response = JSON.parse(payload);
 
-  const sig = req.headers.get('Stripe-Signature')!;
+  const sig = req.headers.get('stripe-signature')!;
   let event;
   try {
     event = stripe.webhooks.constructEvent(
@@ -30,6 +30,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       seatsReserved: 1,
       totalAmount: amount_total ? (amount_total / 100).toString() : '0',
       createdAt: new Date(),
+      stripeId: id,
     };
 
     const newReservation = await createReservation(order);

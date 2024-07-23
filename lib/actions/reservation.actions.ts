@@ -56,6 +56,7 @@ export const createReservation = async (
     await connect();
     // const rideOwner = await User.findById(reservation);
     const newReservation = await Reservation.create({
+      stripeId: reservation.stripeId,
       rideId: reservation.rideId,
       buyerId: reservation.buyerId,
       seatsReserved: reservation.seatsReserved,
@@ -68,7 +69,21 @@ export const createReservation = async (
   }
 };
 
-// Get reservation by ride
+// Get all reservations in a ride
+// export const getReservationsByRide = async (rideId: string) => {
+//   try {
+//     await connect();
+//     const rideObjectId = new ObjectId(rideId);
+//     const reservations = await Reservation.find({
+//       rideId: rideObjectId,
+//     }).populate('buyerId');
+//     return JSON.parse(JSON.stringify(reservations));
+//   } catch (error) {
+//     handleError(error);
+//   }
+// };
+
+// // Get reservation by ride
 export const getReservationsByRide = async ({
   searchString,
   rideId,
@@ -141,7 +156,7 @@ export async function getReservationByUser({
   try {
     await connect();
     const skipAmount = (Number(page) - 1) * limit;
-    const conditions = { buyer: userId };
+    const conditions = { buyerId: userId };
 
     const reservations = await Reservation.distinct('ride._id')
       .find(conditions)

@@ -4,4 +4,5 @@ export type CreateReservationInfoParams = {
   totalAmount: string;
   createdAt: Date;
   seatsReserved: number;
+  stripeId: string;
 };

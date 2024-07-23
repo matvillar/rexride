@@ -15,6 +15,7 @@ import { RiDeleteBin5Fill } from 'react-icons/ri';
 import { usePathname, useRouter } from 'next/navigation';
 import { deleteRideById } from '@/lib/actions/ride.actions';
 import { Button } from '../ui/button';
+import { toast } from 'sonner';
 
 const DeleteModal = ({ rideId }: { rideId: string }) => {
   const pathname = usePathname();
@@ -46,6 +47,7 @@ const DeleteModal = ({ rideId }: { rideId: string }) => {
                 const result = await deleteRideById({ rideId, path: pathname });
                 if (result.success) {
                   router.push('/');
+                  toast.success('Ride deleted successfully');
                 }
               })
             }

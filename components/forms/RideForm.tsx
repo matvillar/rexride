@@ -27,6 +27,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { createRide } from '@/lib/actions/ride.actions';
 import { useRouter } from 'next/navigation';
 import { updateRide } from '@/lib/actions/ride.actions';
+import { toast } from 'sonner';
 
 const RideForm = ({ userId, type, ride, rideId }: RideFormParams) => {
   const initValues =
@@ -57,6 +58,7 @@ const RideForm = ({ userId, type, ride, rideId }: RideFormParams) => {
         });
         if (newRide) {
           form.reset();
+          toast.success('Ride created successfully');
           router.push(`/rides/${newRide._id}`);
         }
       } catch (error) {
@@ -75,6 +77,7 @@ const RideForm = ({ userId, type, ride, rideId }: RideFormParams) => {
         });
         if (updatedRide) {
           form.reset();
+          toast.success('Ride updated successfully');
           router.push(`/rides/${updatedRide._id}`);
         }
       } catch (error) {

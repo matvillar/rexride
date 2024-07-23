@@ -5,7 +5,6 @@ import SmallRideCard from './SmallRideCard';
 const Collection = async ({
   data,
   noRidesTitle,
-
   noRidesForSpecificLocation,
   collectionType,
   limit,

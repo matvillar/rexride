@@ -3,14 +3,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { IRide } from '@/lib/constants/interfaces/IRide';
 import { Button } from '../ui/button';
 import { use, useEffect } from 'react';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '../ui/form';
+
 import { checkoutOrder } from '@/lib/actions/reservation.actions';
 
 type Props = {
@@ -18,9 +11,11 @@ type Props = {
   userId: string;
 };
 
-loadStripe(
-  'pk_test_51PeJupRram48F1n8rWup51mBA5qxdNOyMxZSXWun9O0pQCbTk1BJzHYJriie2NYcs1UinkrvY9O2WaRw6Yi1kHgM00ej0dF3At'
-);
+if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === undefined) {
+  throw new Error('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not defined');
+}
+
+loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
 // const form = useForm({});
 const CheckoutReservation = ({ ride, userId }: Props) => {

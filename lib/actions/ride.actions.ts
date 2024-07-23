@@ -12,6 +12,7 @@ import { DeleteRideProps } from '../constants/types/DeleteRideProps';
 import { revalidatePath } from 'next/cache';
 import { UpdateRideParams } from '../constants/types/UpdateRideParams';
 import { GetRidesByUserParams } from '../constants/types/GetRidesByUserParams';
+import { toast } from 'sonner';
 
 const fillRideDetails = async (query: any) => {
   return query.populate({
