@@ -17,10 +17,8 @@ import { getUserById } from '@/lib/actions/user.actions';
 export default async function Home() {
   const { sessionClaims } = auth();
   const currSessionUserId = sessionClaims?.userId as string;
-  if (!currSessionUserId) return null;
 
   const user = await getUserById(currSessionUserId);
-  if (!user) return null;
 
   const rides = await getAllRides({
     query: '',
