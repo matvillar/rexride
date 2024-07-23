@@ -9,7 +9,7 @@ import { CheckoutReservationParams } from '../constants/types/CheckoutReservatio
 import Stripe from 'stripe';
 import { redirect } from 'next/navigation';
 import { ObjectId } from 'mongodb';
-import { GetReservationsByRideParams } from '../constants/types/GetReservationsByRideParams';
+
 import { GetReservationByUserParams } from '../constants/types/GetReservationByUserParams';
 import Ride from '../models/ride.model';
 import path from 'path';
