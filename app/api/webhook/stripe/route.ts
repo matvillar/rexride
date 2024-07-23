@@ -1,14 +1,15 @@
-import Stripe from 'stripe';
+import stripe from 'stripe';
 import { NextResponse, NextRequest } from 'next/server';
 import { createReservation } from '@/lib/actions/reservation.actions';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+// const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: Request) {
   const payload = await req.text();
   const response = JSON.parse(payload);
 
   const sig = req.headers.get('stripe-signature')!;
+
   let event;
   try {
     event = stripe.webhooks.constructEvent(
