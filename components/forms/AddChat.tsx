@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { addChatValidation } from '@/lib/validations/addChat.validation';
 import { useForm } from 'react-hook-form';

@@ -34,10 +34,9 @@ export async function POST(req: Request) {
     };
 
     const newReservation = await createReservation(order);
-    console.log('newReservation', newReservation);
-    console.log('payload', payload, id, amount_total, metadata);
+
     return NextResponse.json({ message: 'Ok', order: newReservation });
   }
-  console.log('Event:', event.type);
+
   return new Response('', { status: 200 });
 }

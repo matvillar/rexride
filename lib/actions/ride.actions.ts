@@ -13,22 +13,22 @@ import { revalidatePath } from 'next/cache';
 import { UpdateRideParams } from '../constants/types/UpdateRideParams';
 import { GetRidesByUserParams } from '../constants/types/GetRidesByUserParams';
 import { toast } from 'sonner';
-
-const fillRideDetails = async (query: any) => {
-  return query.populate({
-    path: 'userId', // this path is a reference to the User model, it needs to exist in the Ride model
-    model: User,
-    select: '_id name email phone userImage',
-  });
-};
+import City from '../models/city.model';
+import { ICity } from '../constants/interfaces/ICity';
+import { ObjectId } from 'mongodb';
 
 const populateRide = (query: any) => {
-  return query.populate({
-    path: 'userId',
-    model: User,
-    select: '_id firstName email name',
-  });
-  // .populate({ path: 'category', model: Category, select: '_id name' })
+  return query
+    .populate({
+      path: 'userId',
+      model: User,
+      select: '_id firstName email name userImage',
+    })
+    .populate({
+      path: 'pickupLocation',
+      model: City,
+      select: '_id name',
+    });
 };
 
 export async function getRidesByUser({
@@ -62,6 +62,7 @@ export async function getRidesByUser({
 export const createRide = async ({
   userId,
   rideEvent,
+
   path,
 }: CreateRideParams) => {
   try {
@@ -74,6 +75,7 @@ export const createRide = async ({
       ...rideEvent,
       status: RideStatusEnum.SCHEDULED,
       rideType: rideEvent.rideType,
+
       userId,
     });
     // Add ride to user's rides array
@@ -111,7 +113,7 @@ export const updateRide = async ({ userId, ride, path }: UpdateRideParams) => {
 export const getRideById = async (id: string) => {
   try {
     await connect();
-    const ride = await fillRideDetails(Ride.findById(id));
+    const ride = await populateRide(Ride.findById(id));
 
     if (!ride) throw new Error('Ride not found');
 
@@ -119,6 +121,10 @@ export const getRideById = async (id: string) => {
   } catch (error) {
     handleError(error);
   }
+};
+
+const getCityByName = async (city: string) => {
+  return City.findOne({ name: { $regex: city, $options: 'i' } });
 };
 
 export const getAllRides = async ({
@@ -129,12 +135,26 @@ export const getAllRides = async ({
 }: GetAllRidesParams) => {
   try {
     await connect();
-    const conditions = {};
+    const titleConditions = query
+      ? { title: { $regex: query, $options: 'i' } }
+      : {};
+
+    const cityCondition = city ? await getCityByName(city) : null;
+
+    const conditions = {
+      $and: [
+        titleConditions,
+        cityCondition ? { pickupLocation: cityCondition._id } : {},
+      ],
+    };
+
+    const skipAmount = (Number(page) - 1) * limit;
     const rideQuery = Ride.find(conditions)
       .sort({ createdAt: 'desc' })
-      .skip(0)
+      .skip(skipAmount)
       .limit(limit);
-    const rides = await fillRideDetails(rideQuery);
+    const rides = await populateRide(rideQuery);
+
     const totalRides = await Ride.countDocuments(conditions);
 
     return {

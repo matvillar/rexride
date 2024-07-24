@@ -20,6 +20,7 @@ import { IoCalendarSharp } from 'react-icons/io5';
 import Link from 'next/link';
 import DeleteModal from '@/components/shared/DeleteModal';
 import ReserveSeatBtn from '@/components/shared/ReserveSeatBtn';
+import { FaUser } from 'react-icons/fa';
 
 const RideDetails = async ({ params: { id } }: SearchParams) => {
   const ride = await getRideById(id);
@@ -81,11 +82,18 @@ const RideDetails = async ({ params: { id } }: SearchParams) => {
                     </div>
                   </div>
                 ) : (
-                  <Button className="hover:bg-transparent hover:text-blue-500">
-                    <Link href={`/messages/${ride.userId._id}`}>
-                      <RiMessage2Fill size={24} />
-                    </Link>
-                  </Button>
+                  <div className="flex gap-4">
+                    <Button className="hover:bg-transparent hover:text-blue-500">
+                      <Link href={`/messages/${ride.userId._id}`}>
+                        <RiMessage2Fill size={24} />
+                      </Link>
+                    </Button>
+                    <Button className="hover:bg-transparent hover:text-blue-500">
+                      <Link href={`/profile/${ride.userId._id}`}>
+                        <FaUser size={24} />
+                      </Link>
+                    </Button>
+                  </div>
                 )}
               </div>
               <div className="flex flex-col items-start px-10">
@@ -93,7 +101,9 @@ const RideDetails = async ({ params: { id } }: SearchParams) => {
                   <FaCircle className="text-black" />
                   <div className="flex flex-col items-start ml-5">
                     <p className="text-gray-500 text-sm">Start Location</p>
-                    <p className="mr-2 font-semibold">{ride.pickupLocation}</p>
+                    <p className="mr-2 font-semibold">
+                      {ride.pickupLocation.name}
+                    </p>
                   </div>
                 </div>
                 <div

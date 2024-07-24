@@ -13,7 +13,7 @@ export interface IRide extends Document {
   status: RideStatusEnum;
   seatsAvailable: number;
   pricePerSeat: number;
-  pickupLocation: string;
+  pickupLocation: { _id: string; name: string };
   dropOffLocation: string;
   createdAt: Date;
 }

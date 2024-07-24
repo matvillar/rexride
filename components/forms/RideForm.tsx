@@ -28,6 +28,8 @@ import { createRide } from '@/lib/actions/ride.actions';
 import { useRouter } from 'next/navigation';
 import { updateRide } from '@/lib/actions/ride.actions';
 import { toast } from 'sonner';
+import { createCity } from '@/lib/actions/city.actions';
+import { ICity } from '@/lib/constants/interfaces/ICity';
 
 const RideForm = ({ userId, type, ride, rideId }: RideFormParams) => {
   const initValues =
@@ -35,6 +37,7 @@ const RideForm = ({ userId, type, ride, rideId }: RideFormParams) => {
       ? {
           ...ride,
           startTime: new Date(ride.startTime),
+          pickupLocation: ride.pickupLocation.name,
         }
       : RideDefaultValues;
   const router = useRouter();
@@ -48,14 +51,19 @@ const RideForm = ({ userId, type, ride, rideId }: RideFormParams) => {
       ...values,
       pricePerSeat: Number(values.pricePerSeat), // Ensure it's a number
       description: values.description ?? undefined,
+      pickupLocation: values.pickupLocation,
     };
     if (type === 'Create') {
       try {
+        const newCity = await createCity({ name: values.pickupLocation });
+        rideData.pickupLocation = newCity._id;
         const newRide = await createRide({
           userId,
           rideEvent: rideData,
+
           path: '/rides',
         });
+
         if (newRide) {
           form.reset();
           toast.success('Ride created successfully');

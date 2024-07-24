@@ -42,7 +42,7 @@ export const checkoutOrder = async (order: CheckoutReservationParams) => {
       success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/profile`,
       cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/`,
     });
-    console.log('session', session);
+
     redirect(session.url!);
   } catch (error) {
     throw error;
@@ -54,7 +54,7 @@ export const createReservation = async (
 ) => {
   try {
     await connect();
-    // const rideOwner = await User.findById(reservation);
+
     const newReservation = await Reservation.create({
       stripeId: reservation.stripeId,
       rideId: reservation.rideId,

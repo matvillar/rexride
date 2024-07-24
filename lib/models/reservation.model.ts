@@ -1,6 +1,4 @@
 import mongoose from 'mongoose';
-import { IReservation } from '../constants/interfaces/IReservation';
-import { ReservationItem } from '../constants/types/ReservationItem';
 
 const reservationSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },

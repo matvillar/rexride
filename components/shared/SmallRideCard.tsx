@@ -21,6 +21,7 @@ type Props = {
 const SmallRideCard = async ({ data, collectionType }: Props) => {
   const { sessionClaims } = auth();
   const currSessionUserId = sessionClaims?.userId as string;
+
   const currUser = await getUserById(currSessionUserId);
 
   return (
@@ -34,6 +35,7 @@ const SmallRideCard = async ({ data, collectionType }: Props) => {
               : collectionType === 'All_Rides'
                 ? `/rides/${ride._id}`
                 : `/rides/${ride._id}`; // A fallback or default URL if needed
+
         return (
           <li key={ride._id} className="flex justify-center">
             <div className="group min-h-52 min-w-72 relative flex w-full flex-col overflow-hidden bg-white border-4 border-black rounded-lg p-4 shadow-lg transition-all hover:shadow-xl hover:-translate-y-1">
@@ -58,7 +60,10 @@ const SmallRideCard = async ({ data, collectionType }: Props) => {
                 </h2>
               </div>
               <div className="flex">
-                <p className="mr-5 font-semibold"> {ride.pickupLocation}</p>
+                <p className="mr-5 font-semibold">
+                  {' '}
+                  {ride.pickupLocation.name}
+                </p>
                 <div className="flex-grow border-t-4 border-spacing-x-4 border-black -mr-4 my-3"></div>
                 <IoIosArrowForward size={28} />
                 <p className="font-semibold"> {ride.dropOffLocation}</p>

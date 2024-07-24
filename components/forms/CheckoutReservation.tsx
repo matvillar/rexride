@@ -35,7 +35,7 @@ const CheckoutReservation = ({ ride, userId }: Props) => {
 
   const onCheckout = async () => {
     const order = {
-      rideTitle: ride.pickupLocation,
+      rideTitle: ride.pickupLocation.name,
       rideId: ride._id,
       price: ride.pricePerSeat,
       buyerId: userId,

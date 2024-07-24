@@ -1,5 +1,8 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { UrlQueryParams } from './constants/types/UrlQueryParams';
+import qs from 'query-string';
+import { RemoveUrlQueryParams } from './constants/types/RemoveUrlQueryParams';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -124,3 +127,47 @@ export const formatPrice = (price: string) => {
 
   return formattedPrice;
 };
+
+export function formUrlQuery({ params, key, value }: UrlQueryParams) {
+  const currentUrl = qs.parse(params);
+
+  currentUrl[key] = value;
+
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query: currentUrl,
+    },
+    { skipNull: true }
+  );
+}
+export function removeKeysFromQuery({
+  params,
+  keysToRemove,
+}: RemoveUrlQueryParams) {
+  const currentUrl = qs.parse(params);
+
+  keysToRemove.forEach((key) => {
+    delete currentUrl[key];
+  });
+
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query: currentUrl,
+    },
+    { skipNull: true }
+  );
+}
+
+// average rating
+export function averageRating(ratings: number[]): number {
+  const sum = ratings.reduce((acc, curr) => acc + curr, 0);
+  const avg = sum / ratings.length;
+  return avg;
+}
+
+export function oneDecimalRating(rating: number): number {
+  // Format the number to one decimal place and parse it back to a number
+  return parseFloat(rating.toFixed(2));
+}

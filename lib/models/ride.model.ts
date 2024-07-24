@@ -22,7 +22,11 @@ const rideSchema = new mongoose.Schema({
   },
   seatsAvailable: { type: Number, required: true },
   pricePerSeat: { type: Number, required: true },
-  pickupLocation: { type: String, required: true },
+  pickupLocation: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'City',
+    required: true,
+  },
   dropOffLocation: { type: String, required: true },
   description: { type: String },
   createdAt: { type: Date, default: Date.now },
